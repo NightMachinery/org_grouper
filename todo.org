@@ -4,8 +4,19 @@
 #+BEGIN_SRC markdown
 Write a rust script using scriptisto `org_grouper [--group-headings-at=1 --out-replace-nulls=yes] CMD ...` that has:
 - `--group-headings-at=1`: group headings and their content at the given level. This is the main change from normal grep; instead of lines, we operate on org-mode sections. If the level is, eg, 2, each child heading with a star level more than 2, will be grouped together with the previous heading.
+when the group-headings-at is, eg, 3, headings with star level 1-2 are being  ignored. we should ouput the whole file completely, our only job is grouping  it using null chars. so with a big group-headings-at, we would group each  heading <= group-headings-at as a new group. i.e., seeing a heading with star  level 2 would start a new group.
 
 We should format the document as groups separated by the null char, then simply  call the `CMD ...`. Finally, if `--out-replace-nulls=yes`, we should replace the nulls in the output with line breaks.
 
 This way we can run tools like `ugrep` etc. on org headings.
 #+END_SRC
+
+** _
+#+BEGIN_SRC markdown
+Add `--out-replace-nulls-with='\n'` which can change what we replace the nulls with in the output.
+#+END_SRC
+* _
+#+begin_src zsh :eval never
+org_grouper ugrep --null-data -v '(?:Davarzani/f[0-2])'
+#+end_src
+

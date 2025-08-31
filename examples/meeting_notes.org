@@ -1,0 +1,78 @@
+#+TITLE: examples/meeting_notes
+
+Hi.
+
+* Weekly Team Meeting - 2024-01-15
+Attendees: Alice, Bob, Carol, Dave
+
+** Action Items
+- [ ] Alice: Review PR #123
+- [ ] Bob: Update documentation  
+- [X] Carol: Deploy hotfix
+- [ ] Dave: Schedule next sprint
+
+Bob will handle this.
+
+** Discussion Topics
+Bob raised concerns about the timeline.
+
+*** Budget Planning
+We need to allocate resources for Q2.
+Current budget: $50k
+Projected expenses: $45k
+
+#+begin_src zsh :eval never
+echo "hi world!"
+#+end_src
+
+*** Technical Debt
+Several items need attention:
+- Legacy authentication system
+- Database migration
+- API versioning
+
+*** Product Roadmap
+- Feature A: Implement user profiles
+- Feature B: Develop real-time notifications
+- Future Ideas: Explore AI integration
+
+** Next Steps
+Schedule follow-up meeting for Friday.
+
+* Project Alpha Status Update
+Alice and Bob are leading this initiative.
+
+** Current Progress  
+- Frontend: 80% complete
+- Backend: 60% complete  
+- Testing: 40% complete
+
+** Blockers
+*** Infrastructure Issues
+- Staging environment down
+- CI/CD pipeline failing
+
+*** Resource Constraints
+Not enough developers on the team.
+Need to hire 2 more engineers.
+
+** Timeline
+Target completion: End of February
+
+* Bug Triage Session
+Bob and Carol will prioritize these issues.
+
+** High Priority Bugs
+- Memory leak in user service
+- Authentication timeout issues
+- Data corruption in reports
+
+** Medium Priority  
+- UI rendering glitches
+- Performance degradation
+- Mobile compatibility issues
+
+** Low Priority
+- Cosmetic fixes
+- Feature requests
+- Documentation updates
