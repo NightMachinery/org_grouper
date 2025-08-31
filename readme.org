@@ -1,6 +1,83 @@
 #+TITLE: org_grouper
 
-* Install
+A command-line tool for grouping org-mode sections at specified heading levels and piping them to external commands for processing.
+
+* Description
+
+=org_grouper= reads org-mode content from stdin, groups sections by heading level, separates each group with NUL characters, pipes the data to a specified command, and optionally replaces NUL characters in the output with newlines or custom strings.
+
+This tool is particularly useful for batch processing org-mode documents with external tools like =grep=, =ugrep=, =wc=, or any command that can handle NUL-separated input.
+
+* Installation
+
+** From Git Repository
 #+begin_src zsh :eval never
 cargo install --force --git https://github.com/NightMachinery/org_grouper.git
 #+end_src
+
+** From Source
+#+begin_src zsh :eval never
+git clone https://github.com/NightMachinery/org_grouper.git
+cd org_grouper
+cargo install --path .
+#+end_src
+
+* Usage
+
+#+begin_src
+org_grouper [OPTIONS] <CMD>...
+#+end_src
+
+** Options
+
+- =--group-headings-at <LEVEL>= :: Org heading star level to group at (default: 1)
+  - Level 1: =*= headings
+  - Level 2: =**= headings
+  - Level 3: =***= headings, etc.
+
+- =--out-replace-nulls <yes|no>= :: Replace NUL characters in command output (default: yes)
+
+- =--out-replace-nulls-with <STRING>= :: String to replace NUL characters with (default: =\n=)
+  - Supports escape sequences: =\n=, =\t=, =\r=, =\0=, =\\=
+
+* Examples
+
+** Search for TODO items across grouped sections
+#+begin_src zsh :eval never
+cat notes.org | org_grouper ugrep --null-data "TODO"
+#+end_src
+
+** Group by level-2 headings and search for priorities
+#+begin_src zsh :eval never
+cat notes.org | org_grouper --group-headings-at=2 -- grep -E "Priority|Important"
+#+end_src
+
+** Count lines in each group with custom separator
+#+begin_src zsh :eval never
+cat notes.org | org_grouper --out-replace-nulls-with="\n---\n" -- wc -l
+#+end_src
+
+** Process with custom command and preserve NUL separators
+#+begin_src zsh :eval never
+cat document.org | org_grouper --out-replace-nulls=no -- your-custom-processor
+#+end_src
+
+* How It Works
+
+1. Reads org-mode content from stdin
+2. Parses heading levels using regex pattern =^(?P<stars>\*+)\s=
+3. Groups content sections based on the specified heading level
+4. Joins groups with NUL (=\0=) characters as separators
+5. Pipes the grouped data to the specified command
+6. Optionally replaces NUL characters in the command's output
+7. Forwards both stdout and stderr from the command
+8. Exits with the same status code as the executed command
+
+* Requirements
+
+- Rust toolchain for compilation
+- Commands used in examples (=ugrep=, =grep=, =wc=, etc.) must be available in PATH
+
+* License
+
+See the repository for license information.
