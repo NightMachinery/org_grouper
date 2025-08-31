@@ -1,0 +1,6 @@
+#+TITLE: org_grouper
+
+* Install
+#+begin_src zsh :eval never
+cargo install --force --git https://github.com/NightMachinery/org_grouper.git
+#+end_src

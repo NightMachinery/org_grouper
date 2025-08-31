@@ -222,3 +222,59 @@ fn test_level_3_includes_all_higher_levels() {
     assert!(stdout.contains("**** Level4"));  // Level 4 stays in same group as Level 3
     assert!(stdout.contains("** AnotherLevel2"));  // Another Level 2 starts new group
 }
+
+#[test]
+fn test_double_dash_separator() {
+    let org_content = "* First\nContent 1\n* Second\nContent 2\n";
+    let mut temp_file = NamedTempFile::new().unwrap();
+    temp_file.write_all(org_content.as_bytes()).unwrap();
+    temp_file.flush().unwrap();
+
+    // Test that -- works to separate our options from command options
+    let output = Command::new("cargo")
+        .args(&["run", "--", "--group-headings-at=1", "--", "echo", "test-output"])
+        .stdin(std::fs::File::open(temp_file.path()).unwrap())
+        .output()
+        .expect("Failed to execute org_grouper");
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("test-output"));
+}
+
+#[test]  
+fn test_command_with_conflicting_option_names() {
+    let org_content = "* Test\nContent\n";
+    let mut temp_file = NamedTempFile::new().unwrap();
+    temp_file.write_all(org_content.as_bytes()).unwrap();
+    temp_file.flush().unwrap();
+
+    // Test passing a command that has its own --help option
+    let output = Command::new("cargo")
+        .args(&["run", "--", "--", "sh", "-c", "echo 'command executed'"])
+        .stdin(std::fs::File::open(temp_file.path()).unwrap())
+        .output()
+        .expect("Failed to execute org_grouper");
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("command executed"));
+}
+
+#[test]
+fn test_hyphen_values_in_command() {
+    let org_content = "* Section\nContent\n";
+    let mut temp_file = NamedTempFile::new().unwrap();
+    temp_file.write_all(org_content.as_bytes()).unwrap();
+    temp_file.flush().unwrap();
+
+    // Test that we can pass values starting with hyphens to commands
+    let output = Command::new("cargo")
+        .args(&["run", "--", "echo", "-n", "no-newline"])
+        .stdin(std::fs::File::open(temp_file.path()).unwrap())
+        .output()
+        .expect("Failed to execute org_grouper");
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    // echo -n should not add a newline, so content should be concatenated
+    assert!(stdout.contains("no-newline"));
+    assert!(!stdout.ends_with("\n\n")); // Should not have extra newline from echo -n
+}

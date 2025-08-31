@@ -1,5 +1,7 @@
 #+TITLE: org_grouper/todo
 
+* Rewrite =readme.org=.
+
 * _
 #+BEGIN_SRC markdown
 Write a rust script using scriptisto `org_grouper [--group-headings-at=1 --out-replace-nulls=yes] CMD ...` that has:
@@ -15,6 +17,7 @@ This way we can run tools like `ugrep` etc. on org headings.
 #+BEGIN_SRC markdown
 Add `--out-replace-nulls-with='\n'` which can change what we replace the nulls with in the output.
 #+END_SRC
+
 * _
 #+begin_src zsh :eval never
 org_grouper ugrep --null-data -v '(?:Davarzani/f[0-2])'
