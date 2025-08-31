@@ -1,0 +1,11 @@
+#+TITLE: org_grouper/todo
+
+* _
+#+BEGIN_SRC markdown
+Write a rust script using scriptisto `org_grouper [--group-headings-at=1 --out-replace-nulls=yes] CMD ...` that has:
+- `--group-headings-at=1`: group headings and their content at the given level. This is the main change from normal grep; instead of lines, we operate on org-mode sections. If the level is, eg, 2, each child heading with a star level more than 2, will be grouped together with the previous heading.
+
+We should format the document as groups separated by the null char, then simply  call the `CMD ...`. Finally, if `--out-replace-nulls=yes`, we should replace the nulls in the output with line breaks.
+
+This way we can run tools like `ugrep` etc. on org headings.
+#+END_SRC
